@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>天天生鲜-注册</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/register.js"></script>
+
+    <script src="/static/layer/layer.js"></script>
+</head>
+<body>
+<div class="register_con" style="height: 750px;width: 750px;margin-top: 0;padding-top: 70px;">
+    <div class="l_con fl">
+        <a class="reg_logo"><img src="/static/images/logo02.png"></a>
+        <div class="reg_slogan">足不出户 · 新鲜每一天</div>
+        <div class="reg_banner"></div>
+    </div>
+
+    <div class="r_con fr">
+        <div class="reg_title clearfix">
+            <h1>用户注册</h1>
+            <a href="{% url 'shopping:login' %}">登录</a>
+        </div>
+
+
+        <div class="reg_form clearfix">
+            <form method=post onsubmit="return false">
+                {% csrf_token %}
+
+                <ul>
+                {#      用户名          #}
+                    <li>
+                        <label>用户名:</label>
+                        <input type="text" name="member_name" id="member_name" class=form-control
+                               placeholder=用户名，不少于4个字符>
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    {#      昵称          #}
+                    <li>
+                        <label>昵称:</label>
+                        <input type="text" name="member_nickname" id="member_nickname"
+                               class=form-control
+                               placeholder=昵称，不少于2个字符>
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                {#      密码         #}
+                    <li>
+                        <label>密码:</label>
+                        <input type="password" name="member_pwd" id="member_pwd"
+                               placeholder=至少6位，必须包含字母、数字
+                               class=form-control
+                        >
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                {#      确认密码        #}
+                    <li>
+                        <label>确认密码:</label>
+                        <input type="password" name="r_pwd"
+                               id="r_pwd" class=form-control
+                               placeholder=请输入确认密码
+
+                        >
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                {#    邮箱    #}
+                    <li>
+                        <label>邮箱:</label>
+                        <input type="text" name="member_email"
+                               id="member_email"
+                               placeholder=需要通过邮件激活帐户
+                               class=form-control
+
+                        >
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    <li>
+                        <label>验证码:</label>
+                        <input type="text" name="valid_code"
+                               placeholder=请输入验证码
+                               class=form-control
+                               style="width:170px"
+                        >
+                        &nbsp;&nbsp;&nbsp;
+                        <img width="100" height="38" id="valid_code_img" src="/shopping/get_valid_code_img/" onclick="this.src='/shopping/get_valid_code_img/?'+Math.random()">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    {#    手机验证    #}
+{#                    <li>#}
+{#                        <label>电话:</label>#}
+{#                        <input type="text" name="member_tel"#}
+{#                               id="member_tel"#}
+{#                               placeholder=输入11位手机号#}
+{#                               class=form-control#}
+{#                        >#}
+{#                        <span class="error_tip">提示信息</span>#}
+{#                    </li>#}
+
+                {#          使用协议          #}
+                    <li class="agreement">
+                        <input type="checkbox" name="allow" id="allow" checked="checked">
+                        <label>同意”天天生鲜用户使用协议“</label>
+                        <span class="error_tip2">提示信息</span>
+                    </li>
+
+            {#        注册按钮            #}
+                    <li class="reg_sub">
+                        <input type="submit" value="注 册" id="submitBtn">
+{#                        <button id=submitBtn type=submit>#}
+{#                            <span>注册</span>#}
+{#                        </button>#}
+
+                    </li>
+
+                </ul>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer no-mp">
+    <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+    <p>电话：010-****888 京ICP备*******8号</p>
+</div>
+<script src="/static/layer/layer.js"></script>
+<script>
+$(document).ready(function () {
+//当点击登录按钮时候，把form表单里的内容提交到后台
+    $("#submitBtn").click(function () {
+        $.post("{% url 'shopping:register' %}", $('form').serialize(), function (data) {
+
+            if (data.status == 0) {
+                arr = {
+                    'member_name': '用户名',
+                    'member_pwd': '密码',
+                    'r_pwd': '确认密码',
+                    'member_email': '邮箱',
+                    'member_nickname': '昵称',
+                    '__all__': ''
+                };
+                $.each(data['info'], function (key, value) {  //遍历键值对
+                    console.log(key);
+                    console.log(value[0]);
+                    layer.msg(arr[key] + value[0]);
+                    return false;
+                    {#                 layer.msg(arr[key]+data['info'][key]);#}
+                    {#                 return false;#}
+                });
+
+            }else if (data.status == 2) {
+                layer.msg(data['info']);
+            }else if(data.status==3){
+                layer.msg(data['info']);
+            }else {
+                layer.msg(data['info'], function () {
+                    location.href = "{% url 'shopping:index' %}";
+                });
+            }
+        }, 'json');
+    });
+})
+
+
+</script>
+
+</body>
+</html>

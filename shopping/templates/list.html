@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-商品列表</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="/static/js/jQuery-1.8.2.min.js"></script>
+    <script src="/static/layer/layer.js"></script>
+</head>
+<body>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+				<div class="login_info fl">
+					欢迎您：<em>张 山</em>
+				</div>
+                <div class="login_btn fl">
+
+					<a href="/shopping/index/">首页</a>
+					<span>|</span>
+
+				</div>
+{#                <div class="login_btn fl">#}
+{#					 {% if get_member_id %}#}
+{#					<a href="javascript:;">{{ get_member_name }}您好</a>#}
+{#					<span>|</span>#}
+{#                    {% endif %}#}
+{#				</div>#}
+				<div class="login_btn fl">
+                     {% if  not get_member_id %}
+					<a href="{% url 'shopping:login' %}">登录</a>
+					<span>|</span>
+					<a href="{% url 'shopping:register' %}">注册</a>
+                    {% endif %}
+				</div>
+				<div class="user_link fl">
+                    {% if get_member_id %}
+{#					<span>|</span>#}
+					<a href="{% url 'shopping:user_center_info' %}">{{ get_member_name }}</a>
+					<span>|</span>
+					<a href="{% url 'shopping:cart' %}">我的购物车</a>
+					<span>|</span>
+					<a href="{% url 'shopping:user_center_order' %}">我的订单</a>
+                    <span>|</span>
+					<a href="{% url 'shopping:loginout' %}">用户退出</a>
+                    {% endif %}
+				</div>
+			</div>
+		</div>		
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="/static/images/logo.png"></a>
+		<div class="search_con fl">
+            <form method="post" action="/shopping/list/1/" enctype="multipart/form-data" id="form1">
+                {% csrf_token %}
+			<input type="text" class="input_text fl" name="shousuo" placeholder="搜索商品">
+			<input type="text" class="input_text fl" name="get_num"  value="1" style="display: None">
+			<input type="submit" class="input_btn fr" name="" value="搜索" id="dosubmit">
+            </form>
+		</div>
+
+		<div class="guest_cart fr">
+			<a href="{% url 'shopping:cart' %}" class="cart_name fl">我的购物车</a>
+            {% if get_member_id %}
+			<div class="goods_count fl" id="goods_num">{{ cart_num }}</div>
+            {% else %}
+             <div class="goods_count fl" id="goods_num">0</div>
+            {% endif %}
+            <input type="text" style="display:None;" id="get_goods_id"/>
+		</div>
+
+	</div>
+
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>	
+				<span></span>			
+				<ul class="subnav">
+                    {% for v1 in category_list %}
+					<li><a href="/shopping/list/{{ v1.category_id }}/" class="fruit">{{ v1.category_name }}</a></li>
+                    {% endfor %}
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="{% url 'shopping:index' %}">首页</a></li>
+				<li class="interval">|</li>
+{#				<li><a href="">手机生鲜</a></li>#}
+{#				<li class="interval">|</li>#}
+{#				<li><a href="">抽奖</a></li>#}
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+    {% if get_num %}
+        {% if result_search %}
+		<a href="#" >{{ category_id_name }}</a>
+         {% else %}
+         <a href="#" ></a>
+         {% endif %}
+    {% endif %}
+    {% if not get_num %}
+        {% for v2 in category_list_part %}
+		<a href="#">{{ v2.category_name }}</a>
+        {% endfor %}
+    {% endif %}
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+                    {% for v3 in goods_list_part %}
+					<li>
+						<a href="/shopping/detail/{{ v3.goods_id }}/"><img src="{{ v3.goods_img }}"></a>
+						<h4><a href="/shopping/detail/{{ v3.goods_id }}/">{{ v3.goods_name }}</a></h4>
+						<div class="prize">￥{{ v3.goods_price }}</div>
+					</li>
+                    {% endfor %}
+
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a href="#" class="active">默认</a>
+{#				<a href="#">价格</a>#}
+{#				<a href="#">人气</a>#}
+			</div>
+
+			<ul class="goods_type_list clearfix">
+            {% if get_num %}
+                {% if result_search %}
+                {% for v5 in goods_search %}
+                <li>
+					<a href="/shopping/detail/{{ v5.goods_id }}/"><img src="{{ v5.goods_img }}"></a>{# c为列表页跳到详情页获取goods_id #}
+					<h4><a href="/shopping/detail/{{ v5.goods_id }}/">{{ v5.goods_name }}</a></h4>
+					<div class="operate">
+						<span class="prize">￥{{ v5.goods_price }}</span>
+						<span class="unit">{{ v5.goods_price }}/{{ v5.goods_unit }}</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+                        <span style="display:None;">{{ v5.goods_id }}</span>
+					</div>
+				</li>
+                {% endfor %}
+                {% else %}
+                    <div style="font-size:30px;text-align: center;margin-top:100px;color: red;">您搜索的暂无此物品，您可以选其他物品！！！</div>
+                {% endif %}
+            {% else %}
+                {% for v1 in goods_list %}
+				<li>
+					<a href="/shopping/detail/{{ v1.goods_id }}/"><img src="{{ v1.goods_img }}"></a>{# c为列表页跳到详情页获取goods_id #}
+					<h4><a href="/shopping/detail/{{ v1.goods_id }}/">{{ v1.goods_name }}</a></h4>
+					<div class="operate">
+						<span class="prize">￥{{ v1.goods_price }}</span>
+						<span class="unit">{{ v1.goods_price }}/{{ v1.goods_unit }}</span>
+						<a href="#" class="add_goods" title="加入购物车"></a>
+                        <span style="display:None;">{{ v1.goods_id }}</span>
+					</div>
+				</li>
+                {% endfor %}
+            {% endif %}
+			</ul>
+
+{#			<div class="pagenation">#}
+{#				<a href="#"><上一页</a>#}
+{#				<a href="#" class="active">1</a>#}
+{#				<a href="#">2</a>#}
+{#				<a href="#">3</a>#}
+{#				<a href="#">4</a>#}
+{#				<a href="#">5</a>#}
+{#				<a href="#">下一页></a>#}
+{#			</div>#}
+        {#  分页#}
+        {% if get_num %}
+            {% if result_search %}
+            <nav aria-label="Page navigation">
+                 <ul class="pagination">
+                     {% if goods_search.has_pervious %}
+                         <li class="previous"><a
+                                 href="/shopping/list/?page={{goods_search.previous_page_number }}">
+                             上一页</a></li>
+                     {% else %}
+                         <li class="previous disabled"><a href="#">上一页</a></li>
+                     {% endif %}
+                     {% for num in pageRange %}
+                         <li {% if num == currentpage %} class="'active" {% endif %}><a
+                                 href="?page={{ num }}">{{ num }}</a></li>
+                     {% endfor %}
+                     {% if  goods_search.has_next %}
+                         <li class="next"><a
+                                 href="/shopping/list/?page={{ goods_search.next_page_number }}">下一页</a></li>
+                     {% else %}
+                         <li class="next disabled"><a href="#">下一页</a></li>
+                     {% endif %}
+                 </ul>
+
+             </nav>
+             {% endif %}
+        {% else %}
+
+             <nav aria-label="Page navigation">
+                 <ul class="pagination">
+                     {% if goods_list.has_pervious %}
+                         <li class="previous"><a
+                                 href="/shopping/list/?page={{ goods_list.previous_page_number }}">
+                             上一页</a></li>
+                     {% else %}
+                         <li class="previous disabled"><a href="#">上一页</a></li>
+                     {% endif %}
+                     {% for num in pageRange %}
+                         <li {% if num == currentpage %} class="'active" {% endif %}><a
+                                 href="?page={{ num }}">{{ num }}</a></li>
+                     {% endfor %}
+                     {% if  goods_list.has_next %}
+                         <li class="next"><a
+                                 href="/shopping/list/?page={{ goods_list.next_page_number }}">下一页</a></li>
+                     {% else %}
+                         <li class="next disabled"><a href="#">下一页</a></li>
+                     {% endif %}
+                 </ul>
+
+             </nav>
+        {% endif %}
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	<script>
+        {# 点击购物车让物品添加 #}
+        $('.add_goods').on('click',function () {
+            var get_id=$(this).next().text();
+            console.log($(this).next().text());
+            $.post('/shopping/list/1/', {
+                                    'dosubmit_praise': 1,
+                                    'get_id': get_id,
+                                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                                }, function (data) {
+                if(data.status == 1){
+{#                    goood_num=Number($('#goods_num').text())+1;#}
+{#                    $('#goods_num').text(goood_num);#}
+                    layer.msg(data.info);
+                    {# 以下如果会员没有添加点击添加成功 #}
+                }else if(data.status == 2){
+                    goood_num=Number($('#goods_num').text())+1;
+                    $('#goods_num').text(goood_num);
+                    layer.msg(data.info);
+                }else if(data.status == 3){
+                    layer.msg(data.info);
+                }
+
+            }, 'json');
+        });
+
+
+    </script>
+</body>
+</html>

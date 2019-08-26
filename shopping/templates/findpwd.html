@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>找回密码</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/layer/layer.js"></script>
+</head>
+<body>
+<div class="register_con" style="height: 750px;width: 750px;margin-top: 0;padding-top: 70px;">
+    <div class="l_con fl">
+        <a class="reg_logo"><img src="/static/images/logo02.png"></a>
+        <div class="reg_slogan">足不出户 · 新鲜每一天</div>
+        <div class="reg_banner"></div>
+    </div>
+
+    <div class="r_con fr">
+        <div class="reg_title clearfix">
+            <h1>找回密码</h1>
+            <a href="{% url 'shopping:login' %}">登录</a>
+        </div>
+
+        <div class="reg_form clearfix">
+            <form id=loginForm method=post>
+                {% csrf_token %}
+
+                <ul>
+
+                    <li>
+                        <label>用户名:</label>
+                        <input placeholder=用户名
+                           type=text
+                           name="member_name"
+                           id="member_name"
+                           >
+                    </li>
+
+                    <li>
+                        <label>邮箱:</label>
+                        <input type="text"
+                               name="member_email"
+                               id="member_email"
+                               placeholder=注册的邮箱
+                               class=form-control>
+                    </li>
+
+                    <li class="reg_sub">
+                        <input type='button' value="提交" id="submitBtn">
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        //当点击登录按钮时候，把form表单里的内容提交到后台d
+        $("#submitBtn").click(function () {
+            $.post("{% url 'shopping:findpwd' %}", $('form').serialize(), function (data) {
+                if (data.status == 1) {
+                    layer.msg(data['info']);
+                    location.href="{% url 'shopping:login' %}";
+                } else {
+                    layer.msg(data['info']);
+                    return false;
+                }
+        }, 'json');
+    });
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>修改个人信息</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/register.js"></script>
+    <script src="/static/js/jquery.min.js"  type="text/javascript"></script>
+    <script src="/static/layer/layer.js"></script>
+
+</head>
+<body>
+<div class="register_con">
+    <div class="l_con fl">
+        <a class="reg_logo"><img src="/static/images/logo02.png"></a>
+        <div class="reg_slogan">足不出户 · 新鲜每一天</div>
+        <div class="reg_banner"></div>
+    </div>
+
+    <div class="r_con fr">
+        <div class="reg_title clearfix">
+            <h1>用户修改</h1>
+        </div>
+
+
+        <div class="reg_form clearfix">
+            <form method=post onsubmit="return false">
+                {% csrf_token %}
+
+                <ul>
+                    <li>
+                        <label>用户名:</label>
+                        <input type="text" name="member_name" class=form-control
+                               value="{{ xiugai_obj.member_name }}">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    <li>
+                        <label>用户昵称:</label>
+                        <input type="text" name="member_nickname" class=form-control
+                               value="{{ xiugai_obj.member_nickname }}">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    <li>
+                        <label>密码:</label>
+                        <input type="password" name="member_pwd"
+                               value="{{ xiugai_obj.member_pwd }}"
+                               class=form-control>
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    <li>
+                        <label>确认密码:</label>
+                        <input type="password" name="r_pwd"
+                               class=form-control
+                               value="{{ xiugai_obj.member_pwd }}">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+
+
+                    <li>
+                        <label>支付密码:</label>
+                        <input type="password" name="member_paypwd"
+                               value="{% if xiugai_obj.member_paypwd %}{{ xiugai_obj.member_paypwd }}{% endif %}"
+                               class=form-control>
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    <li>
+                        <label>邮箱:</label>
+                        <input type="text" name="member_email"
+                               value="{% if xiugai_obj.member_email %}{{ xiugai_obj.member_email }}{% endif %}"
+                               class=form-control>
+                        <span class="error_tip">提示信息</span>
+                    </li>
+
+                    <li class="reg_sub">
+                        <input type="submit" value="修改信息" id="submitBtn">
+
+
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer no-mp">
+    <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+    <p>电话：010-****888 京ICP备*******8号</p>
+</div>
+<script>
+    $("#submitBtn").click(function () {
+        $.post("/shopping/xiugai/{{ xiugai_obj.member_id }}/", $('form').serialize(), function (data) {
+            if (data.status == 1) {
+               layer.msg(data['info'], function () {
+                   console.log(5454);
+                        location.href="{% url 'shopping:user_center_info' %}";
+                    console.log(8888)
+                    });
+            } else {
+                console.log(1111);
+                layer.msg(data['info']);
+                console.log(2222);
+            }
+        }, 'json');
+    });
+
+</script>
+
+</body>
+</html>

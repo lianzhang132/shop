@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-用户中心</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script src="/static/js/jquery.min.js"  type="text/javascript"></script>
+</head>
+<body>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+                                <div class="login_btn fl">
+
+					<a href="/shopping/index/">首页</a>
+					<span>|</span>
+
+				</div>
+{#                <div class="login_btn fl">#}
+{#					 {% if get_member_id %}#}
+{#					<a href="javascript:;">{{ get_member_name }}您好</a>#}
+{#					<span>|</span>#}
+{#                    {% endif %}#}
+{#				</div>#}
+				<div class="login_btn fl">
+					 {% if  not get_member_id %}
+					<a href="{% url 'shopping:login' %}">登录</a>
+					<span>|</span>
+					<a href="{% url 'shopping:register' %}">注册</a>
+                    {% endif %}
+				</div>
+				<div class="user_link fl">
+					 {% if get_member_id %}
+					<a href="{% url 'shopping:user_center_info' %}">{{ get_member_name }}</a>
+					<span>|</span>
+					<a href="{% url 'shopping:cart' %}">我的购物车</a>
+					<span>|</span>
+					<a href="{% url 'shopping:user_center_order' %}">我的订单</a>
+                    <span>|</span>
+					<a href="{% url 'shopping:loginout' %}">退出</a>
+                    {% endif %}
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="{% url 'shopping:index' %}" class="logo fl"><img src="/static/images/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+{#		<div class="search_con fr">#}
+{#			<input type="text" class="input_text fl" name="" placeholder="搜索商品">#}
+{#			<input type="button" class="input_btn fr" name="" value="搜索">#}
+{#		</div>		#}
+	</div>
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="{% url 'shopping:user_center_info' %}">· 个人信息</a></li>
+				<li><a href="{% url 'shopping:user_center_order' %}" class="active">· 全部订单</a></li>
+				<li><a href="{% url 'shopping:user_center_site' %}">· 收货地址</a></li>
+			</ul>
+		</div>
+
+
+		<div class="right_content clearfix">
+				<h3 class="common_title2">全部订单</h3>
+{#                {% for v in num %}#}
+{#                {% for i,x in v.items %}#}
+                {% for i,x in orderNO_dict.items %}
+{#            <form action="" method="post">#}
+{#            {% csrf_token %}#}
+				<ul class="order_list_th w978 clearfix">
+					<li class="col01">{{ i.order_addtime|date:"Y-m-d H:i:s" }}</li>
+					<li class="col02">订单号：{{ i.order_number }}</li>
+                    {% if i.order_status == 1 %}
+					<li class="col02 stress">未支付</li>
+                    {% elif i.order_status == 2 %}
+                     <li class="col02 stress">已支付</li>
+                    {% endif %}
+				</ul>
+                <input type="hidden" name="dingdanhao" value="{{ i.order_number }}">
+				<table class="order_list_table w980">
+					<tbody>
+						<tr>
+							<td width="55%">
+                                {% for n in x %}
+								<ul class="order_goods_list clearfix">					
+									<li class="col01"><img src="{{ n.order_detail_img }}"></li>
+									<li class="col02">{{ n.order_detail_name }}<em>{{ n.order_detail_price }}元</em></li>
+									<li class="col03">{{ n.order_detail_num }}</li>
+                                    {% load my_tag_filter %}
+									<li class="col04">{% multi_filter n.order_detail_price n.order_detail_num %}元</li>
+								</ul>
+                                    {% endfor %}
+							</td>
+                            {% load my_tag_filter %}
+                            <td width="15%">总价：{% get_orderAll x %}元</td>
+                            {% if i.order_status == 1 %}
+                            <td width="15%">待付款</td>
+                            {% elif i.order_status == 2 %}
+                            <td width="15%">已付款</td>
+                            {% endif %}
+
+                            {% if i.order_status == 1 %}
+                            <td width="15%"><a href="/shopping/pay_password/?order_num={{ i.order_number }}" class="oper_btn">去付款</a></td>
+                            {% elif i.order_status == 2 %}
+                            <td width="15%"><a href="#" class="oper_btn">查看物流</a>
+                            {% endif %}
+
+						</tr>
+					</tbody>
+				</table>
+				{% endfor %}
+{#				{% endfor %}#}
+{#                {% for w,r in orderYES_dict.items %}#}
+{#				<ul class="order_list_th w978 clearfix">#}
+{#					<li class="col01">{{ w.order_addtime|date:"Y-m-d H:i:s" }}</li>#}
+{#					<li class="col02">订单号：{{ w.order_number }}</li>#}
+{#					<li class="col02 stress">已支付</li>			#}
+{#				</ul>#}
+{#				<table class="order_list_table w980">#}
+{#					<tbody>#}
+{##}
+{#						<tr>#}
+{#							<td width="55%">#}
+{#                                {% for b in r %}#}
+{#								<ul class="order_goods_list clearfix">					#}
+{#									<li class="col01"><img src="{{ b.order_detail_img }}"></li>#}
+{#									<li class="col02">{{ b.order_detail_name }}<em>{{ b.order_detail_price }}元</em></li>#}
+{#									<li class="col03">{{ b.order_detail_num }}</li>#}
+{#                                    {% load my_tag_filter %}#}
+{#									<li class="col04">{% multi_filter b.order_detail_price b.order_detail_num %}元</li>#}
+{#								</ul>#}
+{#                                    {% endfor %}#}
+{#                            {% load my_tag_filter %}#}
+{#							</td>#}
+{#							<td width="15%">总价：{% get_orderAll r %}元</td>#}
+{#							<td width="15%">已付款</td>#}
+{#							<td width="15%"><a href="#" class="oper_btn">查看物流</a></td>#}
+{#						</tr>#}
+{#					</tbody>#}
+{#				</table>#}
+{#                {% endfor %}#}
+
+{#				<div class="pagenation">#}
+{#					<a href="#"><上一页</a>#}
+{#					<a href="#" class="active">1</a>#}
+{#					<a href="#">2</a>#}
+{#					<a href="#">3</a>#}
+{#					<a href="#">4</a>#}
+{#					<a href="#">5</a>#}
+{#					<a href="#">下一页></a>#}
+{#				</div>#}
+
+{#        <div class="pagenation">#}
+{#        <nav aria-label="Page navigation">#}
+{#    <ul class="pagination">#}
+{#        {% if num.has_previous %}#}
+{#            <li class="previous"><a href="/shopping/user_center_order/?page={{ num.previous_page_number }}">上一页</a></li>#}
+{#        {% endif %}#}
+{##}
+{#{% for num in pageRange %}#}
+{#    <li {% if num == currentPage %}class=" active"{% endif %}><a href="?page={{ num }}">{{ num }}</a></li>#}
+{#{% endfor %}#}
+{##}
+{#        {% if num.has_next %}#}
+{#            <li class="next"><a href="/shopping/user_center_order/?page={{ num.next_page_number }}">下一页</a></li>#}
+{#        {% endif %}#}
+{#    </ul>#}
+{#</nav>#}
+{#        </div>#}
+
+		</div>
+	</div>
+
+
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	
+</body>
+</html>

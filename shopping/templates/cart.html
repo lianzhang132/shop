@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-购物车</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script src="/static/js/jquery.min.js"  type="text/javascript"></script>
+    <script src="/static/layer/layer.js"></script>
+
+</head>
+<body>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+				<div class="login_btn fl">
+					<a href="/shopping/index/">首页</a>
+                <span>|</span>
+				</div>
+				<div class="login_btn fl">
+					 {% if  not member_id %}
+					<a href="{% url 'shopping:login' %}">登录</a>
+					<span>|</span>
+					<a href="{% url 'shopping:register' %}">注册</a>
+                    {% endif %}
+				</div>
+				<div class="user_link fl">
+					 {% if member_id %}
+					<span>|</span>
+					<a href="{% url 'shopping:user_center_info' %}">{{ member_obj.member_nickname }}</a>
+					<span>|</span>
+					<a href="{% url 'shopping:cart' %}">我的购物车</a>
+					<span>|</span>
+					<a href="{% url 'shopping:user_center_order' %}">我的订单</a>
+                    <span>|</span>
+					<a href="{% url 'shopping:loginout' %}">退出</a>
+                    {% endif %}
+				</div>
+			</div>
+		</div>		
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="/static/images/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;购物车</div>
+		<div class="search_con fr">
+			<form method="post" action="/shopping/list/1/" enctype="multipart/form-data" id="form1">
+                {% csrf_token %}
+			<input type="text" class="input_text fl" name="shousuo" placeholder="搜索商品">
+            <input type="text" class="input_text fl" name="get_num"  value="1" style="display: None">
+			<input type="submit" class="input_btn fr" name="" value="搜索" id="dosubmit">
+            </form>
+		</div>		
+	</div>
+    <form action="/shopping/place_order/" id="form" method="post">
+    {% csrf_token %}
+	<div class="total_count">全部商品<em>{{ cart_list.count }}</em>件</div>
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+    {% for cart in cart_list %}
+        <ul class="cart_list_td clearfix" data-id="{{ cart.goods.member_id }}">
+		<li class="col01"><input type="checkbox" class="quanxuan1" name="goods_ids" value="{{ cart.goods.goods_id }}"><input type="hidden" name="goodsnums" class="goodsnums" value=""></li>
+		<li class="col02"><img src="{{ cart.goods.goods_img }}"></li>
+		<li class="col03">{{ cart.goods.goods_name }}<br><em>{{ cart.goods.goods_price }}/500g</em></li>
+		<li class="col04" name="goodsnum" value="{{ cart.goods.goods_unit }}">{{ cart.goods.goods_unit }}</li>
+		<li class="col05"><span class="danjia1">{{ cart.goods.goods_price }}</span>元</li>
+		<li class="col06">
+			<div class="num_add">
+
+{#				<a href="javascript:;" class="add fl">+</a>#}
+{#				<input type="text" name="goodsnum1" id="goodsnum1" class="num_show fl" value="{{ cart.cart_num }}">#}
+{#				<a href="javascript:;" class="minus fl">-</a>#}
+
+				<a href="javascript:;" class="add fl" data-id="{{ cart.goods.goods_id }}">+</a>
+				<input type="text" name="goodsnum1" id="goodsnum1" class="num_show fl goodsnum1"  value="{{ cart.cart_num }}">
+				<a href="javascript:;" class="minus fl" data-id="{{ cart.goods.goods_id }}">-</a>
+
+                <input type="hidden" name="goods_id" id="goods_id" value="{{ cart.goods.goods_id }}">
+			</div>
+		</li>
+            {% load my_tag_filter %}
+		<li class="col07"><span class="zongjia1">{% multi_filter cart.cart_num cart.goods.goods_price %}</span>元</li>
+		<li class="col08" data-id="{{ cart.cart_id }}"><a href="javascript:;" class="del">删除</a></li>
+	</ul>
+
+    {% endfor %}
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox"  id="quanxuan"></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em class="zongjiage">0</em><br class="">共计<b class="zongshangpin">0</b>件商品</li>
+		<li class="col04" >
+            <input type="submit" id="account" style="width: 50px;height: 30px" value="去结算">
+{#            <a href="/shopping/place_order/"  id="account">去结算</a>#}
+        </li>
+	</ul>
+</form>
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	
+</body>
+<script>
+
+
+{#总数量#}
+    function zs() {
+        allNum=0;
+        $(".num_show").each(function(i){
+             if($(this).parent().parent().parent().find('.quanxuan1').is(':checked')) {
+                 allNum += Number($(this).val());
+             }
+        });
+         $(".zongshangpin").text(allNum);
+    }
+
+//总价格
+    function zj() {
+        new_total_money=0;
+        $(".zongjia1").each(function(i){
+            {#new_total_money+=Number($(this).text());#}
+            if($(this).parent().parent().find('.quanxuan1').is(':checked')){
+                new_total_money+=Number($(this).text());
+            }else {
+                new_total_money+=0;
+                $(".zongjiage").text(new_total_money)
+            }
+
+        });
+        if(new_total_money !== 0){
+            y=new_total_money.toFixed(2);
+        $(".zongjiage").text(y)
+        }else{
+            $(".zongjiage").text(new_total_money)
+        }
+
+    }
+ {#//总数发生变化#}
+ {#           zs();#}
+ {#           //总计发生变化#}
+ {#           zj();#}
+{#减号#}
+    $(".minus").click( function () {
+        _this = this;
+        num = Number($(_this).prev().val());//商品数量
+        if (num > 1) {
+            num -= 1;
+            $(_this).prev().val(num);//商品数量-1
+            id=$(_this).data('id');
+            $.post("{% url 'shopping:cart_update' %}",{'goods_id':id,'shuliang':num,'csrfmiddlewaretoken':'{{ csrf_token }}'}, function (data) {
+                if (data.status === 1) {
+                    layer.msg(data['info'])
+                }
+                },'json');
+
+                   //小计=单价*数量
+        singlePrice=$(_this).parent().parent().prev().children('.danjia1').text();//单价
+        smallPrice=singlePrice*num;
+        x=smallPrice.toFixed(2);
+        $(_this).parent().parent().next().children('.zongjia1').text(x);
+        }
+        if($(_this).parent().parent().parent().find('.quanxuan1').is(':checked')){
+         //单行的商品checked已经选中
+        //总数发生变化：
+            zs();
+        //总计发生变化
+            zj();
+        }
+    });
+
+
+
+{#加号#}
+    $(".add").click( function () {
+        _this=this;
+        num=Number($(_this).next().val());//商品数量
+        num+=1;
+        $(_this).next().val(num);//商品数量+1
+
+
+        id=$(_this).data('id');
+        $.post("{% url 'shopping:cart_update' %}",{'goods_id':id,'shuliang':num,'csrfmiddlewaretoken':'{{ csrf_token }}'}, function (data) {
+                if (data.status === 1) {
+                    layer.msg(data['info'])
+                }
+                },'json');
+           //小计=单价*数量
+        singlePrice=$(_this).parent().parent().prev().children('.danjia1').text();//单价
+        smallPrice=singlePrice*num;
+        x=smallPrice.toFixed(2);
+        $(_this).parent().parent().next().children('.zongjia1').text(x);
+
+        if($(_this).parent().parent().parent().find('.quanxuan1').is(':checked')){
+         //单行的商品checked已经选中
+        //总数发生变化：
+            zs();
+        //总计发生变化
+            zj();
+        }
+    });
+
+{##}
+{#    function List () {#}
+{#        this.listSize = 0;#}
+{#        this.append = append;#}
+{#        this.dataStore = [];#}
+{#    }#}
+{#    function append ( element ) {#}
+{#        this.dataStore[this.listSize++] = element;#}
+{#    }#}
+{#    function toString(){#}
+{#        return this.dataStore;#}
+{#    }#}
+ //点击checkbox
+
+        $(".quanxuan1").click(function (aa) {
+            //总数发生变化
+            zs();
+            //总计发生变化
+            zj();
+            //选中状态
+            _this=this;
+            if($(_this).is(':checked')){
+                get_nums=$(_this).parent().parent().find('#goodsnum1').val();
+                console.log(get_nums);
+                bb=$(_this).next().val(get_nums);
+                console.log(bb)
+            }
+
+        });
+
+
+//当点击删除
+{#   $(".del").click( function () {#}
+{#       $(this).parent().parent().remove();#}
+{#       zs();#}
+{#       //总计发生变化#}
+{#       zj();#}
+{#   });#}
+
+
+{#全选反选#}
+$("#quanxuan").click( function () {
+    _this=this
+    if($(_this).is(':checked')){
+        $('.quanxuan1').prop("checked", true);
+        cc=$(_this).parent().parent().parent().find('.quanxuan1').val();
+{#        console.log(cc);#}
+{#        get_nums_1=$(this).parent().parent().parent().find('#goodsnum1').val();#}
+{#        console.log(get_nums_1);#}
+
+{#        get_nums_1 = $(_this).parent().parent().parent().find('#goodsnum1').val();#}
+        get_nums_1 = $('.goodsnum1').val();
+        console.log(get_nums_1);
+{#        $(_this).parent().parent().parent().find('.goodsnums').val(get_nums_1)#}
+        $('.goodsnums').val(get_nums_1)
+    }else{
+        $('.quanxuan1').prop("checked", false)
+    }
+        //总数发生变化
+        zs();
+        //总计发生变化
+        zj();
+
+});
+
+</script>
+<script>
+      var goodsnum = [];
+        var goods_id = [];
+//点击去结算 跳转到结算页面
+    $(document).on('click', '#account', function () {
+
+
+        $.post("{% url 'shopping:place_order' %}", $('form').serialize(), function (data) {
+             alert("提交订单成功");
+        })
+    })
+
+{#=======#}
+{#        $(".num_add").each(function(i){#}
+{#            if($(this).parent().parent().find(".quanxuan1").is(':checked')){#}
+{#                aa = $(this.children[1]).val();#}
+{#                bb = $(this.children[3]).val();#}
+{#                goodsnum.push(aa);#}
+{#                goods_id.push(bb);#}
+{##}
+{#            }else {#}
+{#                alert("提交信息有误");#}
+{#            }#}
+{#$.post("{% url 'shopping:place_order' %}",{'goods_id':goods_id,'goodsnum':goodsnum,'csrfmiddlewaretoken':'{{ csrf_token }}'}, function (data) {#}
+{#>>>>>>> .r225#}
+{#                    alert("提交订单成功");#}
+
+{#        });#}
+{##}
+{#    })#}
+{#=======#}
+{#                })#}
+{#        });#}
+{##}
+
+{##}
+{#      );#}
+{##}
+{##}
+{##}
+{#>>>>>>> .r225#}
+</script>
+
+<script>
+                //点击删除
+            $(document).on('click', '.del', function () {
+               _this = this;
+                layer.confirm('您确定要删除吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    id = $(_this).parent().data("id");
+                    $.post("{% url 'shopping:delete' %}", {
+                        "id": id,
+                        "csrfmiddlewaretoken": "{{ csrf_token }}"
+                    }, function (data) {
+                        if (data.status == 1) {
+
+                            layer.msg(data.info, function () {
+                                $(_this).parent().parent().remove();
+                                zj();
+                                zs();
+                            });
+
+                       } else {
+                            layer.msg(data.info);
+                        }
+                    }, 'json');
+                }, function () {
+                });
+                return false;//让a连接失效
+            });
+</script>
+</html>

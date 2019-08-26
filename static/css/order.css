@@ -1,0 +1,93 @@
+.ordersta01,.ordersta02,.ordersta03{ padding-left:80px!important;}
+.ordersta01{ font-size:16px; font-weight:700; background:url(../images/orderstate.png) no-repeat 35px 5px;}
+.ordersta02{ color:#CCC}
+.ordersta02 span{ color:#333; padding:0 5px;}
+.ordersta02 span i{ color:#F7980A}
+.ordersta03{ margin:10px 0 15px;}
+.orderstaa01{ padding:5px 12px; background-color:#D80C18; color:#FFFFFF;}
+.orderstaa02{ margin-left:20px; color:#88C6E2}
+.orderproduct{}
+.orderpro01{ height:40px; line-height:40px; background-color:#F7F7F7; border-bottom:1px solid #D9D9D9}
+.orderpro01 span{height:40px; line-height:40px; padding:0 20px;}
+.orderpro01 .orderprospan03{ border-right:0}
+.orderpro01 span i{ color:#969696}
+.orderprocon{ padding:0 20px 20px;}
+.orderproinfo{ border-bottom:2px solid #E8E8E8!important}
+.orderproinfo span{ font-size:14px; font-weight:700; display:inline-table; width:60px; text-align:center; height:35px; line-height:35px; border-bottom:2px solid #88C6E2; margin-bottom:-2px; color:#000!important;}
+.orderprodiv{ padding:12px 0 22px;width:40%; padding-right:5%; float:left;}
+.orderprodiv p{ height:35px; line-height:35px;}
+.orderprodiv p span{ color:#969696; display:inline-table; width:60px; text-align:right; padding-right:20px;}
+.orderinfomation{ width:100%; text-align:center}
+.orderinfomation thead tr{ height:35px; line-height:35px; color:#969696; font-weight:700;}
+.orderinfomation tbody td{ border:1px solid #E8E8E8;}
+.orderdetitle{ width:30%; padding:10px 0;}
+.orderdestate{ width:20%;}
+.orderdejiage{ width:10%;}
+.orderdesum{ width:10%;}
+.orderdepinjia{ width:20%;}
+.orderdezjia{ width:10%; }
+.orderdezjia02{font-weight:700; font-size:14px;}
+.orderdetitle img{ float:left;}
+.orderdetitle p{ float:left; width:415px; padding:10px;}
+.orderdetitle p a,.orderdestatguo{ color:#0088ff}
+.orderdetitle p a:hover{ color:#D80C18}
+.orderdestameiguo{ color:#F7980A}
+.ordersumer{ background-color:#F7F7F7; border:1px solid #e8e8e8; text-align:right;padding-top:20px; padding-right:10px; height:50px; line-height:50px;}
+.orderred{ color:#f00;}
+.selmore{ padding-left:10px; color:#209FE0}
+.wuliucon{position: absolute;left:0;;*top:20px;color:#666;color:#555;z-index:99999;text-align: left;top:180px;width:399px;background-color:#f8f8f8;color: #474747;padding-bottom: 10px;border: 1px solid #88C6E2;padding:15px 8px;display:none}
+.wuliuconn{padding:4px;}
+.wlconleft{float: left;}
+.wlconright{float: left; padding-left:10px; width:160px;text-align: left;}
+.wuliudiv{ border: 1px solid #f7980a;padding: 8px;}
+.wuliuimg{margin-bottom: -1px;padding-left:95px;vertical-align: bottom;}
+.wuliupp i{font-weight: 700;}
+#buy{
+	height:80px; 
+	text-align: right;
+	font-size: 16px;
+}
+
+#buy b{
+	font-weight: bold;
+	font-size: 24px;
+	color:red;
+}
+#buy a{
+	display: inline-block;
+	width: 100px;
+	height:30px;
+	line-height:30px;
+	text-align: center;
+	color:white;
+	font-size: 20px;
+	font-weight: bold;
+	border-radius:8px; 
+	padding: 5px 10px;
+	cursor: pointer;
+	
+}
+
+#buy .tobuy{
+	background: #C40000;
+	color:#fff;
+	margin:0 50px; 
+}
+#buy .tobuy:hover{
+	background: #ff0000;
+
+}
+ #buy{
+      margin:60px;padding:40px;text-align:center;height:390px;
+    }
+
+#buy input{
+      border:1px solid #ccc;
+      margin: 3px;
+      line-height:1.3em;
+      height:1.3em;
+      width:1.3em;
+      font-size:2em;
+      font-weight:bold;
+      text-align:center
+}
